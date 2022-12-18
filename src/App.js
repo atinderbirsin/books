@@ -11,14 +11,25 @@ export default function App() {
   }
 
   function deleteBook(index) {
-    const updatedBooks = books.map((book, index) => {
-        
+    const updatedBooks = books.filter(book => book.id !== index);
+
+    setBooks(updatedBooks);
+  }
+
+  function editBook(index, newTitle) {
+    const updatedBooks = books.map(book => {
+        if(book.id === index) {
+            return { ...book, title:newTitle };
+        }
+
+        return book;
     })
+    setBooks(updatedBooks);
   }
 
   return (
     <div className="flex flex-col m-6">
-      <BookList books={books} />
+      <BookList books={books} handleDeleteBook={deleteBook} handleEditBook={editBook} />
       <BookCreate handleCreateBook={createBook} />
     </div>
   );
