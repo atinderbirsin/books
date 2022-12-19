@@ -1,12 +1,18 @@
+import { useContext, useEffect } from "react";
+import BooksContext from "../context/books";
 import BookShow from "./BookShow";
 
-export default function BookList({ books, handleDeleteBook, handleEditBook }) {
+export default function BookList() {
+  const { books, getBooks } = useContext(BooksContext);
+
+  useEffect(() => {
+    getBooks();
+  }, [])
+
   const renderedList = books.map((book) => (
     <BookShow
       key={book.id}
       book={book}
-      handleDeleteBook={handleDeleteBook}
-      handleEditBook={handleEditBook}
     />
   ));
 

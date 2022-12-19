@@ -1,16 +1,16 @@
-import { useState } from "react";
-// import cover from "../images/cover.jpg";
+import { useContext, useState } from "react";
+import BooksContext from "../context/books";
 import BoookEdit from "./BookEdit";
 
-export default function BookShow({ book, handleDeleteBook, handleEditBook }) {
+export default function BookShow({ book }) {
   const [isClicked, setisClicked] = useState(false);
+  const { deleteBook }  = useContext(BooksContext);
 
   function handleEditClick() {
     setisClicked(!isClicked);
   }
 
-  function onFormSubmit(id, title) {
-    handleEditBook(id, title);
+  function handleBookEdit() {
     setisClicked(!isClicked);
   }
 
@@ -20,7 +20,7 @@ export default function BookShow({ book, handleDeleteBook, handleEditBook }) {
         <div onClick={handleEditClick}>
           <i className="fa-solid fa-pen-to-square"></i>
         </div>
-        <div onClick={() => handleDeleteBook(book.id)}>
+        <div onClick={() => deleteBook(book.id)}>
           <i className="fa-solid fa-trash"></i>
         </div>
       </div>
@@ -29,7 +29,7 @@ export default function BookShow({ book, handleDeleteBook, handleEditBook }) {
         <img className="absolute top-0 left-0 z-0" src={`https://picsum.photos/seed/${book.id}/200/288/`} alt={"cover"} />
       </div>
 
-      <BoookEdit isClicked={isClicked} onSubmit={onFormSubmit} book={book}/>
+      <BoookEdit isClicked={isClicked} onSubmit={handleBookEdit} book={book}/>
     </div>
   );
 }
