@@ -1,34 +1,52 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BookCreate from "./components/BookCreate";
 import BookList from "./components/BookList";
 import "./App.css";
+import api from "./api";
+
 
 export default function App() {
   const [books, setBooks] = useState([]);
 
-  function createBook(bookName) {
-    setBooks([...books, bookName]);
+  async function getBooks() {
+    const data = await api.get('http://localhost:3001/books',);
+    setBooks(data);
   }
 
-  function deleteBook(index) {
-    const updatedBooks = books.filter(book => book.id !== index);
+  useEffect(() => {
+    getBooks()
+  },[])
 
-    setBooks(updatedBooks);
+  async function createBook(title) {
+    const newBook = await api.post('http://localhost:3001/books/',title);
+    setBooks([...books, newBook]);
   }
 
-  function editBook(index, newTitle) {
-    const updatedBooks = books.map(book => {
-        if(book.id === index) {
-            return { ...book, title:newTitle };
-        }
+  async function deleteBook(index) {
+    const response = await api.remove(`http://localhost:3001/books/${index}`);
+    if (response !== null) {
+      const updatedBooks = books.filter(book => book.id !== index);
+      setBooks(updatedBooks);
+    }
+  }
 
-        return book;
-    })
-    setBooks(updatedBooks);
+  async function editBook(index, newTitle) {
+    const response = await api.put(`http://localhost:3001/books/${index}`,newTitle);
+
+    if (response) {
+      const updatedBooks = books.map(book => {
+          if(book.id === index) {
+              return { ...book, title:newTitle };
+          }
+  
+          return book;
+      });
+      setBooks(updatedBooks);
+    }
   }
 
   return (
-    <div className="flex flex-col m-6">
+    <div className="flex flex-col">
       <BookList books={books} handleDeleteBook={deleteBook} handleEditBook={editBook} />
       <BookCreate handleCreateBook={createBook} />
     </div>
