@@ -1,10 +1,10 @@
-import { useContext, useState } from "react";
-import BooksContext from "../context/books";
+import { useState } from "react";
+import useBooksContext from "../hooks/use-books-context";
 import BoookEdit from "./BookEdit";
 
 export default function BookShow({ book }) {
   const [isClicked, setisClicked] = useState(false);
-  const { deleteBook }  = useContext(BooksContext);
+  const { deleteBook } = useBooksContext();
 
   function handleEditClick() {
     setisClicked(!isClicked);

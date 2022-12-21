@@ -1,13 +1,13 @@
-import { useContext, useEffect } from "react";
-import BooksContext from "../context/books";
+import { useEffect } from "react";
+import useBooksContext from "../hooks/use-books-context";
 import BookShow from "./BookShow";
 
 export default function BookList() {
-  const { books, getBooks } = useContext(BooksContext);
+  const { books, getBooks } = useBooksContext();
 
   useEffect(() => {
     getBooks();
-  }, [])
+  }, [getBooks])
 
   const renderedList = books.map((book) => (
     <BookShow
